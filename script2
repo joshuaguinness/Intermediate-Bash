@@ -1,0 +1,41 @@
+#!/bin/bash
+
+if ([ -z "$1" ] || [ -n "$4" ])
+then
+	echo "wrong number of command line arguments"
+	echo "usage: script2 -z"
+	echo "	or"
+	echo '		script2 <file1> -z'
+	echo "	or"
+	echo '		script2 <file1> <file2> -z'
+
+	exit 1
+fi
+
+if ([ '-z' != "$1" ] || [ 'z' != "$2" ] || [ '-z' != "$3" ])
+then
+	echo "Wrong number of command line arguments"
+	echo "Usage: script2 -z"
+	echo "	or"
+	echo '		script2 <file1> -z'
+	echo "	or"
+	echo '		script2 <file1> <file2> -z'
+
+	exit 1
+fi
+
+if [ -z "$2" ]
+then
+	echo "OK"
+fi
+
+if [ -z "$3" ]
+then
+	echo "OK, created file $1"
+	touch "$1"
+	for i in {1..13}
+	do
+		echo "Line 1, $i" >> $i
+	done
+fi		
+

@@ -1,0 +1,114 @@
+#!/bin/bash
+
+mkdir DIR_A
+cd DIR_A
+echo "directory DIR_A created"
+
+mkdir dir_B
+cd dir_B
+echo "dir_B subdirectory created"
+
+for i in {1..12}
+do
+	echo "Line 1 of fileB_$i">fileB_$i
+	echo "Line 2 of fileB_$i">>fileB_$i
+	j=$(($i+1))
+	if [ 12 = $i ]
+	then
+		echo "Next file none">>fileB_$i
+	else
+		echo "Next file fileB_$j">>fileB_$i
+	fi
+done
+
+echo "DIR_A: regular files"
+cd ..
+files=`ls`
+for i in $files
+do
+	if [ -f $i ]
+	then
+		echo "$i"
+	fi
+done
+
+echo "dir_B: regular files"
+cd dir_B
+files=`ls`
+for i in $files
+do
+	if [ -f $i ]
+	then
+		echo "$i"
+	fi
+done
+
+echo "Contents of regular files in dir_B"
+for i in $files
+do
+	cat $i
+	echo "+++++++++++++++++++++++++++++++++"
+done
+
+for i in $files
+do
+	x=`grep '6\|7' $i`
+	if [ -n "$x" ]
+	then
+		mv $i ..
+		cd ..
+		mv $i ..
+		cd ..
+		mv $i DIR_A
+		cd DIR_A
+		cd dir_B
+	fi
+done
+
+echo "DIR_A: regular files"
+cd ..
+files=`ls`
+for i in $files
+do
+	if [ -f $i ]
+	then
+		echo "$i"
+	fi
+done
+
+cd dir_B
+echo "dir_B: regular files"
+files=`ls`
+for i in $files
+do
+	if [ -f $i ]
+	then
+		echo "$i"
+	fi
+done
+
+touch ALLFILE
+for i in $files
+do
+	cat $i >> ALLFILE
+	echo "removing $i"
+	rm $i
+done
+
+echo "dir_B: regular files"
+files=`ls`
+for i in $files
+do
+	if [ -f $i ]
+	then
+		echo $i
+	fi
+done
+
+echo "ALLFILE:"
+cat ALLFILE
+
+cd ..
+cd ..
+
+rm -r DIR_A
